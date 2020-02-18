@@ -24,7 +24,7 @@ class Success extends StatelessWidget {
             height: 50,
           ),
           Text(
-            "Compensa",
+            result,
             style: TextStyle(
               color: Theme.of(context).primaryColor,
               fontSize: 40,
