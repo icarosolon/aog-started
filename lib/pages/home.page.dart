@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Color _color = Colors.deepPurple;
   var _gasController = MoneyMaskedTextController();
   var _alcController = MoneyMaskedTextController();
   var _busy = false;
@@ -20,37 +21,44 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: ListView(
-        children: <Widget>[
-          Logo(),
-          _completed
-              ? Success(
-                  reset: reset,
-                  result: _resultText,
-                )
-              : SubmitForm(
-                  gasController: _gasController,
-                  alcController: _alcController,
-                  busy: _busy,
-                  submitFunc: calculate,
-                ),
-        ],
+      body: AnimatedContainer(
+        duration: Duration(
+          milliseconds: 1200,
+        ),
+        color: _color,
+        child: ListView(
+          children: <Widget>[
+            Logo(),
+            _completed
+                ? Success(
+                    reset: reset,
+                    result: _resultText,
+                  )
+                : SubmitForm(
+                    gasController: _gasController,
+                    alcController: _alcController,
+                    busy: _busy,
+                    submitFunc: calculate,
+                  ),
+          ],
+        ),
       ),
     );
   }
 
   Future calculate() {
+    _color = Colors.deepPurpleAccent;
     double alc =
         double.parse(_alcController.text.replaceAll(new RegExp(r'[,.]'), '')) /
             100;
     double gas =
         double.parse(_gasController.text.replaceAll(new RegExp(r'[,.]'), '')) /
             100;
+    double res = alc / gas;
     setState(() {
       _completed = false;
       _busy = true;
     });
-    double res = alc / gas;
 
     return new Future.delayed(
         const Duration(seconds: 1),
@@ -69,6 +77,7 @@ class _HomePageState extends State<HomePage> {
 
   reset() {
     setState(() {
+      _color = Theme.of(context).primaryColor;
       _alcController = new MoneyMaskedTextController();
       _gasController = new MoneyMaskedTextController();
       _completed = false;
